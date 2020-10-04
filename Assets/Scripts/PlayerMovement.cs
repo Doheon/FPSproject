@@ -33,12 +33,15 @@ public class PlayerMovement : MonoBehaviour {
 
     private Crosshair theCrosshair;
 
+    private PlayerStatus1 status;
+
     private void Start() {
         capsuleCollider = GetComponent<CapsuleCollider>();
         myRigid = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         playerAnimator = GetComponent<Animator>();
         theCrosshair = FindObjectOfType<Crosshair>();
+        status = GetComponent<PlayerStatus1>();
     }
 
     private void Update() {
@@ -71,9 +74,10 @@ public class PlayerMovement : MonoBehaviour {
 
     //------------about move---------
     private void checkSpeed(){
-        if(playerInput.run){
+        if(playerInput.run && status.SP > 0){
             isRun = true;
             applySpeed = runSpeed;
+            status.DecreaseSP();
         }
         else{
             isRun = false;

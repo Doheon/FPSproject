@@ -26,6 +26,8 @@ public class UIManager : MonoBehaviour
     public Text BulletText;
     public GameObject theSniperMode;
     public GameObject theCrossHair;
+    public Slider HPslider;
+    public Slider SPslider;
 
     private void start(){
         BulletText.text = gun.currentBullet + "/" + gun.maxBullet;
@@ -43,5 +45,20 @@ public class UIManager : MonoBehaviour
     public void cancelSniperMode(){
         theSniperMode.SetActive(false);
         theCrossHair.SetActive(true);
+    }
+
+    public void ChangeHP(float _hp){
+        StartCoroutine(ChangeSlider(HPslider, _hp));
+    }
+
+    private IEnumerator ChangeSlider(Slider _slider, float _val){
+        while(Mathf.Abs(_slider.value - _val) > 0.01f){
+            _slider.value = Mathf.Lerp(_slider.value, _val, 0.2f);
+            yield return null;
+        }
+    }
+
+    public void ChangeSP(float _sp){
+        SPslider.value = _sp;
     }
 }

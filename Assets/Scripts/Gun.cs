@@ -81,18 +81,18 @@ public class Gun : MonoBehaviour
         //반동
         transform.localPosition = originPos;
         StopAllCoroutines();
-        StartCoroutine(RetroActionCoroutine());
-        StartCoroutine(RetroActionCoroutine2());
+        StartCoroutine(RetroActionCoroutine()); //총이 뒤로 반동
+        StartCoroutine(RetroActionCoroutine2()); //조준점이 위로 반동
     }
 
     IEnumerator RetroActionCoroutine(){
-        Vector3 recoilBack = new Vector3(originPos.x, originPos.y, retroActionForce);
-        
-        while(transform.localPosition.z <= retroActionForce - 0.01f){
+        Vector3 recoilBack = new Vector3(originPos.x, originPos.y, originPos.z + retroActionForce);
+        while(transform.localPosition.z <= recoilBack.z - 0.01f){
             transform.localPosition = Vector3.Lerp(transform.localPosition, recoilBack, 0.4f);
             yield return null;
         }
-        while(transform.localPosition != originPos){
+        while(transform.localPosition.z - originPos.z > 0.01f)
+        {
             transform.localPosition = Vector3.Lerp(transform.localPosition, originPos, 0.1f);
             yield return null;
         }
@@ -110,13 +110,17 @@ public class Gun : MonoBehaviour
     }
 
 
-    private void Hit(){
+    private void Hit(){ //총알부딪힌거 
         if(Physics.Raycast(theCam.transform.position, theCam.transform.forward + 
         new Vector3(Random.Range(-theCrosshair.GetAccuracy(), theCrosshair.GetAccuracy()),
                     Random.Range(-theCrosshair.GetAccuracy(), theCrosshair.GetAccuracy()), 
                     0f), out hitInfo, range)){
             GameObject clone = Instantiate(hit_effect_prefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
             Destroy(clone, 1f);
+            IDamageable target = hitInfo.collider.GetComponent<IDamageable>();
+            if(target != null){
+                target.OnDamage(damage, hitInfo.point, hitInfo.normal, hitInfo.collider);
+            }
         }
     }
 

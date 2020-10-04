@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStatus : LivingEntity
+public class RotateToPlayer : MonoBehaviour
 {
-    //hp, sp, skill, 공격력, 등등 모든 상태 조절
+    public Transform player;
     void Start()
     {
-        
+        transform.LookAt(player);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        transform.LookAt(player);
     }
 }

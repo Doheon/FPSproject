@@ -41,6 +41,9 @@ public class WeaponChange : MonoBehaviour
             else if(playerInput.weapon2 && currentWeapon != guns[1]){
                 StartCoroutine(ChangeWeaponCoroutine(guns[1].gunName));
             }
+            else if(playerInput.weapon3 && currentWeapon != guns[2]){
+                StartCoroutine(ChangeWeaponCoroutine(guns[2].gunName));
+            }
         }
     }
 

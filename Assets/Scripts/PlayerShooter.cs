@@ -86,7 +86,7 @@ public class PlayerShooter : MonoBehaviour
 
     private void SniperMode(){
         if(gun.gunName == "Sniper" && playerInput.rightMouseDown){
-            theCam.fieldOfView = 30f;
+            theCam.fieldOfView = 20f;
             UIManager.instance.SniperMode();
             gun.gameObject.transform.localScale = Vector3.zero;
             isSniperMode = true;
