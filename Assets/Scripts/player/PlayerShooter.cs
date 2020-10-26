@@ -39,9 +39,11 @@ public class PlayerShooter : MonoBehaviour
     }
 
     private void fireORreload(){
-        if(PlayerInput.instance.fire && !GameManager.instance.CursorMoveMode){
-            if(gun.Fire()){
-                playerAnimator.SetTrigger("Fire");
+        if(PlayerInput.instance.fire){
+            if(!GameManager.instance.CursorMoveMode){
+                if(gun.Fire()){
+                    playerAnimator.SetTrigger("Fire");
+                }
             }
         }
         else if(PlayerInput.instance.reload || gun.currentBullet == 0){

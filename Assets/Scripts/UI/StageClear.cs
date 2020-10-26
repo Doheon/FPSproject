@@ -48,15 +48,15 @@ public class StageClear : MonoBehaviour
     }
 
     private void setLists(){
-        valList.Add(new List<float>{20f, 30f, 40f, 60f}); //attack damage
-        valList.Add(new List<float>{10f, 15f, 20f, 30f}); //attack speed
-        valList.Add(new List<float>{30f, 40f, 50f, 70f}); //crtical damage
-        valList.Add(new List<float>{15f, 25f, 35f, 50f}); //critical probability
-        valList.Add(new List<float>{30f, 45f, 60f, 80f}); //HP
-        valList.Add(new List<float>{20f, 30f, 40f, 60f}); //armor
-        valList.Add(new List<float>{20f, 30f, 40f, 50f}); //skill haste
+        valList.Add(new List<float>{30f, 50f, 70f, 100f}); //attack damage
+        valList.Add(new List<float>{15f, 25f, 35f, 50f}); //attack speed
+        valList.Add(new List<float>{50f, 70f, 90f, 120f}); //crtical damage
+        valList.Add(new List<float>{20f, 35f, 50f, 70f}); //critical probability
+        valList.Add(new List<float>{60f, 80f, 100f, 130f}); //HP
+        valList.Add(new List<float>{30f, 45f, 60f, 80f}); //armor
+        valList.Add(new List<float>{25f, 40f, 55f, 70f}); //skill haste
         valList.Add(new List<float>{20f, 30f, 40f, 50f}); //speed
-        valList.Add(new List<float>{1f, 2f, 3f, 4f}); //life steal
+        valList.Add(new List<float>{2f, 4f, 6f, 10f}); //life steal
 
         AttackDamage = new Set(player.AddAttackDamage);
         AttackSpeed = new Set(player.AddAttackSpeed);
@@ -118,6 +118,7 @@ public class StageClear : MonoBehaviour
         funcList[indexes[0]](valList[indexes[0]][ranks[0]]);
         GameManager.instance.isSelecting = false;
         GameManager.instance.ApplyCursorLock();
+        player.GetComponent<PlayerShooter>().gun.lastFireTime = Time.time;
         abilitySelect.SetActive(false);
     }
 
@@ -125,6 +126,7 @@ public class StageClear : MonoBehaviour
         funcList[indexes[1]](valList[indexes[1]][ranks[1]]);
         GameManager.instance.isSelecting = false;
         GameManager.instance.ApplyCursorLock();
+        player.GetComponent<PlayerShooter>().gun.lastFireTime = Time.time;
         abilitySelect.SetActive(false);
     }
 
@@ -132,6 +134,7 @@ public class StageClear : MonoBehaviour
         funcList[indexes[2]](valList[indexes[2]][ranks[2]]);
         GameManager.instance.isSelecting = false;
         GameManager.instance.ApplyCursorLock();
+        player.GetComponent<PlayerShooter>().gun.lastFireTime = Time.time;
         abilitySelect.SetActive(false);
     }
 

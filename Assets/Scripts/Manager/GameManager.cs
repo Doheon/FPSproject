@@ -41,14 +41,17 @@ public class GameManager : MonoBehaviour
     public int enemyLeft = 0;
 
 
-    public bool isGameover { get; private set; } // 게임 오버 상태
+    public bool isGameover; // 게임 오버 상태
+    public GameObject gameOverTab;
+
+    public bool isStart;
     
     //커서 움직일수 있는 상태들
     public bool isPause = false;
     public bool isSelecting = false;
     public bool CursorMoveMode{
         get{
-            return isPause || isSelecting;
+            return isPause || isSelecting || isGameover;
         }
     }
     public bool canPlayerMove = true;
@@ -67,7 +70,9 @@ public class GameManager : MonoBehaviour
     private void Start() {
         ApplyCursorLock();
         StageClear += ChangeStage;
-        //FindObjectOfType<PlayerHealth>().onDeath += EndGame;
+        isStart = false;
+
+        FindObjectOfType<PlayerStatus>().onDeath += GameOver;
     }
 
     //커서 잠금, 잠금해제
@@ -85,7 +90,6 @@ public class GameManager : MonoBehaviour
     }
 
     public void ChangeStage(){
-        
         if(subStage <5) subStage++;
         else{
             subStage = 1;
@@ -104,6 +108,12 @@ public class GameManager : MonoBehaviour
             UIManager.instance.UpdateLevelText(playerLevel);
         }
         UIManager.instance.UpdateExp(curExp, maxExp);
+    }
+
+    public void GameOver(){
+        isGameover = true;
+        gameOverTab.SetActive(true);
+        ApplyCursorLock();
     }
 
 

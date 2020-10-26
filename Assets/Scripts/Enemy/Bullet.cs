@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision other) {
         PlayerStatus _playerStatus = other.collider.GetComponent<PlayerStatus>();
         if(_playerStatus != null){
-            _playerStatus.OnDamage(damage, false, other.contacts[0].point, other.contacts[0].normal, other.collider); 
+            _playerStatus.OnDamage(damage, false, other.contacts[0].point, other.contacts[0].normal, other.collider);
         }
         if(other.collider.GetComponent<Bullet>() == null) RemoveBullet();
     }
@@ -37,7 +37,8 @@ public class Bullet : MonoBehaviour
         }
     }
     //속도 설정
-    public virtual void SetVelocity(){
+    public virtual void SetVelocity(float _speed){
+        bulletSpeed = _speed;
         myRigid.velocity = (Camera.main.transform.position - transform.position).normalized * bulletSpeed;
         transform.up = (Camera.main.transform.position - transform.position).normalized;
     }

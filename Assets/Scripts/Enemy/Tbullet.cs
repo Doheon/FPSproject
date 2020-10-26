@@ -12,16 +12,20 @@ public class Tbullet : Bullet
         }
     }
 
-    public override void SetVelocity(){
+    public override void SetVelocity(float _speed){
+        bulletSpeed = _speed;
         startVelocity = (Camera.main.transform.position - transform.position).normalized;
         StartCoroutine(TrackBulletCoroutine());
     }
     IEnumerator TrackBulletCoroutine(){
+        myRigid.velocity = startVelocity.normalized * bulletSpeed;
+        transform.up = startVelocity.normalized;
+
         while(gameObject.activeSelf){
             Vector3 curVelocity = (Camera.main.transform.position - transform.position).normalized;
-            myRigid.velocity = Vector3.Lerp(startVelocity, curVelocity, 0.4f) * bulletSpeed;
-            transform.up = Vector3.Lerp(startVelocity, curVelocity, 0.4f);
-            yield return null;
+            myRigid.velocity = Vector3.Lerp(myRigid.velocity.normalized, curVelocity, 0.3f) * bulletSpeed;
+            transform.up = myRigid.velocity.normalized;
+            yield return new WaitForSeconds(0.05f);
         }
     }
 }

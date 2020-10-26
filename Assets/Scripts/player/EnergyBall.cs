@@ -56,7 +56,7 @@ public class EnergyBall : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         while(gameObject.activeSelf && target.gameObject.activeSelf){
             Vector3 curVelocity = (target.transform.position + Vector3.up * target.capsuleCollider.bounds.extents.y - transform.position).normalized;
-            myRigid.velocity = curVelocity * ballSpeed;
+            myRigid.velocity = Vector3.Lerp(myRigid.velocity.normalized, curVelocity, 0.3f) * ballSpeed;
             transform.up = curVelocity;
             yield return null;
         }

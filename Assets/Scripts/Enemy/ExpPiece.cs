@@ -27,7 +27,7 @@ public class ExpPiece : MonoBehaviour
     }
 
     IEnumerator ExpControlCoroutine(){
-        myRigid.velocity = new Vector3(Random.Range(-speed, speed), Random.Range(-speed, speed), Random.Range(-speed, speed));
+        myRigid.velocity = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * 30f;
         yield return new WaitForSeconds(0.1f);
         while(gameObject.activeSelf){
             myRigid.velocity = (Camera.main.transform.position - transform.position).normalized * speed;

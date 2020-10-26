@@ -17,7 +17,7 @@ public class Enemy : LivingEntity
     public CapsuleCollider capsuleCollider;
 
     public LayerMask TargetLayer;
-    private LivingEntity targetEntity;
+    public LivingEntity targetEntity;
     public float sightDistance = 20f;
     public float updatePathTime = 0.5f;
     private float lastUpdateTime;
@@ -26,34 +26,33 @@ public class Enemy : LivingEntity
     public NavMeshAgent pathFinder;
 
     private Coroutine hpsliderCoroutine;
-    private PlayerStatus player;
+    public PlayerStatus player;
 
 
 
 
     public bool hasTarget{
         get{
-            if(targetEntity != null && !targetEntity.dead) return true;
+            if(targetEntity != null && !targetEntity.dead && GameManager.instance.isStart) return true;
             return false;
         }
     }
 
 
-    private void Awake()
+    public virtual void Awake()
     {
         pathFinder = GetComponent<NavMeshAgent>();
         capsuleCollider = GetComponent<CapsuleCollider>();
-
         player = FindObjectOfType<PlayerStatus>();
 
         lastAttackTime = 0f;
         hpSlider.maxValue = startHP;
         hpSlider.value = startHP;
         
-        isStunned = false;
+        isStunned = false;  
     }
 
-    void Update() {
+    public virtual void Update() {
         LookAtPlayer();
         SetPath();
         if(!isStunned){
@@ -107,13 +106,13 @@ public class Enemy : LivingEntity
             Collider[] colliders = Physics.OverlapSphere(transform.position, sightDistance, TargetLayer);
             if(colliders.Length > 0){
                 LivingEntity livingEntity = colliders[0].GetComponent<LivingEntity>();
-                Vector3 _direction = (livingEntity.transform.position - transform.position - Vector3.up * 2).normalized;
-                if(Physics.Raycast(transform.position + Vector3.up * 2 * capsuleCollider.bounds.extents.y, _direction, out RaycastHit _hit, sightDistance)){
-                    if(_hit.transform.tag == "Player"){
+                //Vector3 _direction = (livingEntity.transform.position - transform.position - Vector3.up * 2).normalized;
+                //if(Physics.Raycast(transform.position + Vector3.up * 2 * capsuleCollider.bounds.extents.y, _direction, out RaycastHit _hit, sightDistance)){
+                    //if(_hit.transform.tag == "Player"){
                         targetEntity = livingEntity;
                         pathFinder.SetDestination(targetEntity.transform.position);
-                    }
-                }
+                    //}
+                //}
             }
             if(!hasTarget){
                 pathFinder.SetDestination(transform.position + new Vector3(Random.Range(-10f,10f), 0f,Random.Range(-10f,10f)));
@@ -137,6 +136,7 @@ public class Enemy : LivingEntity
         if(hpsliderCoroutine != null) StopCoroutine(hpsliderCoroutine);
         if(!dead) hpsliderCoroutine = StartCoroutine(changeSlider(hpSlider, HP));
         UIManager.instance.DisplayDamage((int)damage, isCrit, hitPoint);
+        
         if (HP <= 0 && !dead) Die();
 
     }
@@ -165,9 +165,7 @@ public class Enemy : LivingEntity
     public override void Die()
     {
         base.Die();
-        //pathFinder.isStopped = true;
         pathFinder.enabled = false;
-        gameObject.SetActive(false);
     }
 
 }

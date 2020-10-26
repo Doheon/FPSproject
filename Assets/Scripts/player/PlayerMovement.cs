@@ -1,16 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
     //move
     public float walkSpeed;
-    public float runSpeed;
-    private float applySpeed;
-    private bool isRun = false;
-    private bool canRun = true;
+    public float applySpeed;
+    public float gravity;
+    public bool canRun = true;
+
+    public float yVelocity;
+    public Vector3 direction;
+    public Vector3 addDirection;
 
     private Vector3 lastPos;
-    private bool isMove = false;
 
     //jump
     public float jumpForce;
@@ -20,121 +23,116 @@ public class PlayerMovement : MonoBehaviour {
     //rotate
     public float lookSensitivity;
     public float cameraRotationLimit;
-    private float currentCameraRotationX = 0f;
     private float lastMouseY;
 
     //component
     public Camera theCamera;
-    private Rigidbody myRigid;
     private CapsuleCollider capsuleCollider;
+    private CharacterController controller;
 
-    private PlayerInput playerInput;
-    private Rigidbody playerRigidbody;
     private Animator playerAnimator;
 
-    private Crosshair theCrosshair;
 
-    private PlayerStatus status;
+    protected PlayerStatus status;
 
     private void Start() {
         capsuleCollider = GetComponent<CapsuleCollider>();
-        myRigid = GetComponent<Rigidbody>();
-        playerInput = GetComponent<PlayerInput>();
+        controller = GetComponent<CharacterController>();
         playerAnimator = GetComponent<Animator>();
-        theCrosshair = FindObjectOfType<Crosshair>();
         status = GetComponent<PlayerStatus>();
-    }
-
-    private void FixedUpdate() {
-        if(GameManager.instance.canPlayerMove){
-            checkSpeed();
-            Move();
-            MoveCheck();
-            Rotation();
-            CameraRotation();
-            lastMouse();
-        }
+        lastPos = transform.position;
     }
 
     private void Update(){
+        Move();
         if(GameManager.instance.canPlayerMove){
-            TryJump();
+            
+            Rotation();
+            CameraRotation();
+            CheckMove();
         }
     }
 
+    public virtual void Run(){
+
+    }
+
+
     // --------about jump-------
-    private void OnCollisionEnter(Collision collision){
-        if(collision.contacts[0].normal.y > 0.9f){
-            curJump = jumpNumber;
-        }
-    }
-    private void TryJump(){
-        if(playerInput.jump && curJump >0){
+    private void TryJump(Vector3 _velocity){
+        if(PlayerInput.instance.jump && curJump >0){
             curJump--;
-            Jump();
+            Jump(_velocity);
         }
     }
-    private void Jump(){
-        myRigid.velocity = Vector3.up * jumpForce;
-        playerAnimator.SetTrigger("Jump");
+    private void Jump(Vector3 _velocity){
+        _velocity += jumpForce * Vector3.up;
     }
     //--------------------------
 
     //------------about move---------
-    private void checkSpeed(){
-        if(playerInput.run && canRun && status.SP > 0){
-            isRun = true;
-            applySpeed = runSpeed * status.moveSpeed / 100f;
-            status.DecreaseSP();
-        }
-        else{
-            if(status.SP < 0.1f) canRun = false;
-            isRun = false;
-            applySpeed = walkSpeed * status.moveSpeed / 100f;
-            status.IncreaseSP();
-        }
 
-        if(status.SP > 50) canRun = true;
-    }
-
-    private void MoveCheck(){
-        if(Vector3.Distance(lastPos, transform.position) >= 0.01f) isMove = true;
-        else isMove = false;
-        //theCrosshair.walkAnimation(isMove);
-        lastPos = transform.position;
+    private void CheckMove(){
+        if(GameManager.instance.isStart == false){
+            if((transform.position - lastPos).magnitude > 1f) GameManager.instance.isStart = true;
+        }
     }
 
     private void Move(){
-        float _moveVertical = playerInput.moveVertical; 
-        float _moveHorizontal = playerInput.moveHorizontal;
+        if(GameManager.instance.canPlayerMove){
+            float _moveVertical = PlayerInput.instance.moveVertical; 
+            float _moveHorizontal = PlayerInput.instance.moveHorizontal;
 
-        Vector3 _verticalVelocity = transform.forward * _moveVertical;
-        Vector3 _horizontalVelocity = transform.right * _moveHorizontal;
-        Vector3 _Velocity = (_verticalVelocity + _horizontalVelocity).normalized * applySpeed;
+            Vector3 _verticalVelocity = transform.forward * _moveVertical;
+            Vector3 _horizontalVelocity = transform.right * _moveHorizontal;
+            direction = (_verticalVelocity + _horizontalVelocity).normalized;
+            if(PlayerInput.instance.jump && curJump > 1){
+                curJump--;
+                yVelocity = jumpForce;
+            }
 
-        myRigid.MovePosition(transform.position + _Velocity * Time.deltaTime);
+        }
+        else direction = Vector3.zero;
+
+        direction += addDirection;
+        Run();
+
+        Vector3 velocity = direction * applySpeed;
+        if(controller.isGrounded) curJump = jumpNumber;
+        else yVelocity -= gravity * Time.deltaTime;
+        direction.y = yVelocity;
+        controller.Move(direction * applySpeed * Time.deltaTime);
     }
 
+    public void AdditionalMove(Vector3 _direction, float _time){
+        StartCoroutine(AdditionalMoveCoroutine(_direction, _time));
+    }
+    IEnumerator AdditionalMoveCoroutine(Vector3 _direction, float _time){
+        float _curtime = Time.time;
+        while(Time.time < _time + _curtime){
+            addDirection = _direction;
+            yield return null;
+        }
+        addDirection = Vector3.zero;
+    }
+    
     private void Rotation(){
-        float _rotation = playerInput.mouseX;
+        float _rotation = PlayerInput.instance.mouseX;
         Vector3 _rotationY = Vector3.up * _rotation * lookSensitivity * Time.deltaTime;
-        myRigid.MoveRotation(myRigid.rotation * Quaternion.Euler(_rotationY));
+        transform.rotation = transform.rotation * Quaternion.Euler(_rotationY);
     }
 
-    private void lastMouse(){
-        lastMouseY = playerInput.mouseY;
-    }
     private void CameraRotation(){
-        float _rotation = -lastMouseY + playerInput.mouseY;
+        float _rotation = PlayerInput.instance.mouseY;
+
         float _rotationX = _rotation * lookSensitivity * Time.deltaTime;
-        currentCameraRotationX -= _rotationX;
 
         float cur = theCamera.transform.localEulerAngles.x;
         if(cur > 180f) cur -= 360f;
 
-        if(cur > cameraRotationLimit && currentCameraRotationX > 0f) return;
-        if(cur < -cameraRotationLimit && currentCameraRotationX < 0f) return;
-        theCamera.transform.localEulerAngles += Vector3.right * currentCameraRotationX;
+        if(cur > cameraRotationLimit && _rotationX < 0f) return;
+        if(cur < -cameraRotationLimit && _rotationX > 0f) return;
+        theCamera.transform.localEulerAngles += Vector3.right * (-_rotationX);
     }
     //----------------------------------------
 

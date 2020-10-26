@@ -39,6 +39,8 @@ public class UIManager : MonoBehaviour
     //damage
     public TextMeshProUGUI damageText;
     public GameObject damage;
+    public GameObject targeting;
+
     public Camera mainCam;
     
     //stage & enemy
@@ -115,23 +117,27 @@ public class UIManager : MonoBehaviour
         theSniperMode.SetActive(false);
     }
 
-    Coroutine ChangeSliderCoroutine;
+    Coroutine ChangeHPSliderCoroutine;
     public void ChangeHP(float _cur, float _max){
         HPslider.maxValue = _max;
-        if(ChangeSliderCoroutine != null) StopCoroutine(ChangeSliderCoroutine);
-        ChangeSliderCoroutine = StartCoroutine(ChangeSlider(HPslider, _cur));
+        if(ChangeHPSliderCoroutine != null) StopCoroutine(ChangeHPSliderCoroutine);
+        ChangeHPSliderCoroutine = StartCoroutine(ChangeSlider(HPslider, _cur));
+    }
+
+    Coroutine ChangeSPSliderCoroutine;
+    public void ChangeSP(float _sp){
+        SPslider.value = _sp;
+        if(ChangeSPSliderCoroutine != null) StopCoroutine(ChangeSPSliderCoroutine);
+        ChangeSPSliderCoroutine = StartCoroutine(ChangeSlider(SPslider, _sp));
     }
 
     private IEnumerator ChangeSlider(Slider _slider, float _val){
-
         while(Mathf.Abs(_slider.value - _val) > 0.01f){
             _slider.value = Mathf.Lerp(_slider.value, _val, 0.2f);
             yield return null;
         }
     }
-    public void ChangeSP(float _sp){
-        SPslider.value = _sp;
-    }
+
 
     //damage
     public void DisplayDamage(int _damage, bool isCrit, Vector3 _hitPosition){
@@ -142,8 +148,18 @@ public class UIManager : MonoBehaviour
         GameObject _damageText = Instantiate(damage, _hitPosition, Quaternion.identity, transform);
         _damageText.transform.position = mainCam.WorldToScreenPoint(_hitPosition);
         float _distance = (mainCam.transform.position - _hitPosition).magnitude;
+        Destroy(_damageText, 0.3f);
         StartCoroutine(TextUP(_damageText, _hitPosition, _distance));
-        Destroy(_damageText, 1f);
+        
+    }
+
+    public void DisplayTarget(Transform _hitTarget){
+        GameObject _targetImage = Instantiate(targeting, Vector3.zero, Quaternion.identity, transform);
+        _targetImage.transform.position = mainCam.WorldToScreenPoint(_hitTarget.position);
+        Destroy(_targetImage, 0.3f);
+        StartCoroutine(moveImage(_targetImage, _hitTarget));
+        
+
     }
 
     private IEnumerator TextUP(GameObject _text, Vector3 _worldPosition, float _distance){
@@ -157,6 +173,13 @@ public class UIManager : MonoBehaviour
 
         while(_text != null){
             UpdateToWorld(_text, _worldPosition);
+            yield return null;
+        }
+    }
+
+    private IEnumerator moveImage(GameObject _image, Transform _hitTarget){
+        while(_hitTarget && _image){
+            UpdateToWorld(_image, _hitTarget.position);
             yield return null;
         }
     }

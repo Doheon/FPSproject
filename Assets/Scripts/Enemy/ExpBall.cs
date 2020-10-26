@@ -65,6 +65,8 @@ public class ExpBall : LivingEntity
         if(!dead) hpsliderCoroutine = StartCoroutine(changeSlider(hpSlider, HP));
 
         UIManager.instance.DisplayDamage((int)damage, isCrit, hitPoint);
+
+        if (HP <= 0 && !dead) Die();
     }
 
     private IEnumerator changeSlider(Slider _slider, float _val){

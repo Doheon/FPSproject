@@ -34,6 +34,7 @@ public class PlayerStatus : LivingEntity
 
     public int bulletConsume = 1;
     public bool autoAimMode = false;
+    public bool isNodamage;
 
 
     public float hpGrouth;
@@ -43,8 +44,12 @@ public class PlayerStatus : LivingEntity
     private Vector3 originPos;
     private Quaternion originRot;
     //component
+    public Animator hitAnim;
+    private PlayerMovement playerMovement;
+
 
     public virtual void Awake() {
+        playerMovement = GetComponent<PlayerMovement>();
         originPos = transform.position;
         originRot = transform.rotation;
 
@@ -65,10 +70,13 @@ public class PlayerStatus : LivingEntity
 
     public override void OnDamage(float damage, bool isCrit, Vector3 hitPoint, Vector3 hitNormal, Collider hitCollider)
     {
-        damage *= (1f-damageReduction);
-        base.OnDamage(damage, isCrit, hitPoint, hitNormal, hitCollider);
-        UIManager.instance.ChangeHP(HP, startHP);
-        UIManager.instance.UpdateHPText(Mathf.RoundToInt(HP), (int)startHP);
+        if(!isNodamage){
+            damage *= (1f-damageReduction);
+            hitAnim.SetTrigger("hit");
+            base.OnDamage(damage, isCrit, hitPoint, hitNormal, hitCollider);
+            UIManager.instance.ChangeHP(HP, startHP);
+            UIManager.instance.UpdateHPText(Mathf.RoundToInt(HP), (int)startHP);
+        }
     }
 
     public override void RestoreHealth(float newHealth)
@@ -85,6 +93,14 @@ public class PlayerStatus : LivingEntity
         }
         else {
             SP = 0;
+        }
+        UIManager.instance.ChangeSP(SP);
+        UIManager.instance.UpdateSPText(Mathf.RoundToInt(SP), (int)startSP);
+    }
+
+    public void DecreaseSPVal(float _val){
+        if(SP - _val >0){
+            SP -= _val;
         }
         UIManager.instance.ChangeSP(SP);
         UIManager.instance.UpdateSPText(Mathf.RoundToInt(SP), (int)startSP);
@@ -109,14 +125,23 @@ public class PlayerStatus : LivingEntity
 
     public void MoveToDefault(){        
         StartCoroutine(MoveToDefaultCoroutine());
-        transform.rotation = originRot;
+        //transform.rotation = originRot;
     }
 
     IEnumerator MoveToDefaultCoroutine(){
-        while((transform.position - originPos).magnitude > 0.5f){
-            transform.position = Vector3.Lerp(transform.position, originPos, 0.02f);
+        float _tmp = playerMovement.gravity;
+        Vector3 _curPos = transform.position;
+        Quaternion _curOri = transform.rotation;
+
+        playerMovement.gravity = 0f;
+        int iter = 100;
+        for(int i=0; i<iter; i++){
+            transform.position = Vector3.Lerp(_curPos, originPos, (float)i/iter);
+            transform.rotation = Quaternion.Lerp(_curOri, originRot, (float)i/iter);
             yield return null;
         }
+        playerMovement.gravity = _tmp;
+        GameManager.instance.isStart = false;
     }
 
     //능력치 바꿔주는 함수들

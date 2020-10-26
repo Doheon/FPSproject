@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Shield
+  - Weakness
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Weapon
   - Enemy
   - Player
-  - Shield
+  - ignore
   - 
   - 
   - 

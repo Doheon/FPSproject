@@ -26,9 +26,7 @@ public class Gun : MonoBehaviour
             return playerStatus.autoAimMode;
         }
     }
-
-
-    private float lastFireTime;
+    public float lastFireTime;
     public int bulletConsume{
         get{
             return playerStatus.bulletConsume;
@@ -126,12 +124,12 @@ public class Gun : MonoBehaviour
     }
 
     IEnumerator RetroActionCoroutine(){
-        Vector3 recoilBack = new Vector3(originPos.x, originPos.y, originPos.z + retroActionForce);
-        while(transform.localPosition.z <= recoilBack.z - 0.01f){
+        Vector3 recoilBack = new Vector3(originPos.x, originPos.y, originPos.z - retroActionForce);
+        while(transform.localPosition.z >= recoilBack.z + 0.01f){
             transform.localPosition = Vector3.Lerp(transform.localPosition, recoilBack, 0.4f);
             yield return null;
         }
-        while(transform.localPosition.z - originPos.z > 0.01f)
+        while(originPos.z - transform.localPosition.z> 0.01f)
         {
             transform.localPosition = Vector3.Lerp(transform.localPosition, originPos, 0.1f);
             yield return null;
@@ -170,6 +168,11 @@ public class Gun : MonoBehaviour
             if(target != null && hits[i].collider.GetType().Equals(typeof(SphereCollider))){
                 if(Physics.Raycast(theCam.transform.position, (hits[i].point - theCam.transform.position).normalized, out hitInfo, range, (-1) - (1<<11))){;
                     if(hitInfo.transform.GetComponent<IDamageable>() == target){
+                        Enemy _enemy = hitInfo.transform.GetComponent<Enemy>();
+                        if(_enemy != null){
+                            UIManager.instance.DisplayTarget(_enemy.enemyRenderer.transform);
+                        }
+                        else UIManager.instance.DisplayTarget(hitInfo.transform);
                         target.OnDamage(damage, isCrit, hits[i].point, hits[i].normal, hits[i].collider);
                         playerStatus.RestoreHealth(damage * playerStatus.lifeSteal / 100f);
                         return;

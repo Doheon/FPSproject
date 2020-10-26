@@ -34,6 +34,7 @@ public class PlayerInput : MonoBehaviour {
     public bool fire { get; private set; } 
     public bool reload { get; private set; }
     public bool run {get; private set;}
+    public bool dash;
     public bool jump {get; private set;}
     public bool findSight {get; private set;}
 
@@ -74,6 +75,7 @@ public class PlayerInput : MonoBehaviour {
         fire = Input.GetButton(fireButtonName);
         reload = Input.GetButtonDown(reloadButtonName);
         run = Input.GetButton(runButtonName);
+        dash = Input.GetButtonDown(runButtonName);
         jump = Input.GetButtonDown(jumpButtonName);
         mouseX = Input.GetAxis(mousex);
         mouseY = Input.GetAxis(mousey);

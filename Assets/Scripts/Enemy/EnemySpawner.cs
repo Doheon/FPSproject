@@ -5,9 +5,16 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public Enemy enemy1;
-    public Enemy enemy2;
+    public Enemy enemyElite;
+    public Enemy enemyElite2;
+    public Enemy enemySniper;
+    public Enemy enemyBoss1;
 
-    public Transform[] spawnPoints;
+
+    public Transform[] spawnPointsNormal;
+    public Transform[] spawnPointsSniper;
+    public Transform spawnPointBoss;
+    
     public bool isClear;
 
     public int stageMain{
@@ -72,42 +79,94 @@ public class EnemySpawner : MonoBehaviour
         GameManager.instance.StageClear();
         UIManager.instance.UpdateStageText(stageMain, stageSub);
 
-        EnemySpawn1();
+        if(stageSub ==1) EnemySpawn1();
+        if(stageSub ==2) EnemySpawn2();
+        else if(stageSub ==3) EnemySpawn3();
+        else if(stageSub ==4) EnemySpawn4();
+        else if(stageSub == 5) EnemySpawn5();
 
     }
 
 
 
     private void EnemySpawn1(){
-        for(int i=0; i<spawnCount; i++){
-            CreateEnemy(enemy1, health, damage, 3f, exp, Color.white);
+        Transform pos;
+        for(int i=0; i<4; i++){
+            pos = spawnPointsNormal[Random.Range(0, spawnPointsNormal.Length)];
+            CreateEnemy(enemy1, health, damage, 3f, exp, Color.white, pos, false);
         }
-        CreateEnemy(enemy2, health * 5, damage, 3f, exp*2, Color.red);
-
+        pos = spawnPointsNormal[Random.Range(0, spawnPointsNormal.Length)];
+        CreateEnemy(enemyElite, health * 5, damage, 3f, exp*2, Color.red, pos, false);
         isClear = false;
+    }
+
+    private void EnemySpawn2(){
+        Transform pos;
+        for(int i=0; i<5; i++){
+            pos = spawnPointsNormal[Random.Range(0, spawnPointsNormal.Length)];
+            CreateEnemy(enemy1, health, damage, 3f, exp, Color.white, pos, false);
+        }
+        pos = spawnPointsNormal[Random.Range(0, spawnPointsNormal.Length)];
+        CreateEnemy(enemyElite, health * 5, damage, 3f, exp*2, Color.red, pos, false);
+        isClear = false;
+    }
+
+    private void EnemySpawn3(){
+        Transform pos;
+        for(int i=0; i<3; i++){
+            pos = spawnPointsNormal[Random.Range(0, spawnPointsNormal.Length)];
+            CreateEnemy(enemy1, health, damage, 3f, exp, Color.white, pos, false);
+        }
+        for(int i=0; i<3; i++){
+            pos = spawnPointsSniper[i];
+            CreateEnemy(enemySniper, health/2, damage*2, 3f, exp, Color.blue, pos, false);
+        }
+        pos = spawnPointsNormal[Random.Range(0, spawnPointsNormal.Length)];
+        CreateEnemy(enemyElite, health * 5, damage, 3f, exp*2, Color.red, pos, false);
+        isClear = false;
+    }
+
+    private void EnemySpawn4(){
+        Transform pos;
+        for(int i=0; i<3; i++){
+            pos = spawnPointsNormal[Random.Range(0, spawnPointsNormal.Length)];
+            CreateEnemy(enemy1, health, damage, 3f, exp, Color.white, pos, false);
+        }
+        for(int i=0; i<4; i++){
+            pos = spawnPointsSniper[i];
+            CreateEnemy(enemySniper, health/2, damage*2, 3f, exp, Color.blue, pos, false);
+        }
+        pos = spawnPointsNormal[Random.Range(0, spawnPointsNormal.Length)];
+        CreateEnemy(enemyElite2, health * 5, damage, 3f, exp*2, Color.yellow, pos, false);
+        isClear = false;
+    }
+
+    private void EnemySpawn5(){
+        Transform pos;
+        pos = spawnPointBoss;
+        CreateEnemy(enemyBoss1, health*50, damage, 3f, exp*10, Color.magenta, pos, true);
     }
 
 
 
-    private void MakeExpBall(Enemy _enemy, float _exp){
+    private void MakeExpBall(Enemy _enemy, float _exp, bool _isBoss){
         GameObject expBall = ObjectPoolingManager.instance.GetQueue(ObjectPoolingManager.instance.expBallQueue);
-        expBall.transform.position = _enemy.transform.position + Vector3.up *4f * expBall.GetComponent<SphereCollider>().radius;
+        expBall.transform.position = _enemy.transform.position + Vector3.up * 1.8f;
         ExpBall _expball = expBall.GetComponent<ExpBall>();
-        _expball.SetRemoveTime(2);
+        if(!_isBoss) _expball.SetRemoveTime(2);
         _expball.SetExpBallHP(health/3 + _enemy.startHP/10f);
 
         _expball.onDeath += () => _expball.DestroyExpBall(_exp);
     }
 
 
-    private void CreateEnemy(Enemy _enemytype, float _health, float _damage, float _speed, float _exp, Color _color){
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        Enemy _enemy = Instantiate(_enemytype, spawnPoint.position, spawnPoint.rotation);
+    private void CreateEnemy(Enemy _enemytype, float _health, float _damage, float _speed, float _exp, Color _color, Transform _pos, bool _isBoss){
+        Enemy _enemy = Instantiate(_enemytype, _pos.position, _pos.rotation);
         _enemy.Setup(_health, _damage, _speed, _exp, _color);
         enemyLeft++;
 
         _enemy.onDeath += () => Destroy(_enemy.gameObject);
         _enemy.onDeath += () => enemyLeft--;
-        _enemy.onDeath += () => MakeExpBall(_enemy, _enemy.exp);
+        _enemy.onDeath += () => MakeExpBall(_enemy, _enemy.exp, _isBoss);
     }
 }

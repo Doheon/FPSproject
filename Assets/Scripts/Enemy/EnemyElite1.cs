@@ -14,8 +14,8 @@ public class EnemyElite1 : Enemy
                 Bullet _bullet = bullet.GetComponent<Bullet>();
                 _bullet.damage = damage;
                 
-                _bullet.SetRemoveTime(5);
-                _bullet.SetVelocity();
+                _bullet.SetRemoveTime(1);
+                _bullet.SetVelocity(50f);
             }
             lastAttackTime = Time.time;
         }
