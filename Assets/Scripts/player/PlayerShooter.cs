@@ -6,6 +6,7 @@ public class PlayerShooter : MonoBehaviour
 {
     public Gun gun;
     public Camera theCam;
+    public Camera weaponCam;
 
     public Transform gunHolder;
     private Transform leftHandle;
@@ -13,7 +14,7 @@ public class PlayerShooter : MonoBehaviour
 
     private Animator playerAnimator;
 
-    private bool isSniperMode = false;
+    public bool isSniperMode = false;
 
     void Start()
     {
@@ -88,14 +89,16 @@ public class PlayerShooter : MonoBehaviour
     private void SniperMode(){
         if(gun.gunName == "Sniper" && PlayerInput.instance.rightMouseDown){
             theCam.fieldOfView = 20f;
+            theCam.cullingMask = (-1) - (1<<10) - (1<<8);
+            weaponCam.cullingMask = 0;
             UIManager.instance.SniperMode();
-            gun.gameObject.transform.localScale = Vector3.zero;
             isSniperMode = true;
         }
         else if(gun.gunName == "Sniper" && PlayerInput.instance.rightMouseUp){
             theCam.fieldOfView = 60f;
+            theCam.cullingMask = (-1);
+            weaponCam.cullingMask = 1<<8;
             UIManager.instance.cancelSniperMode();
-            gun.gameObject.transform.localScale = Vector3.one;
             isSniperMode = false;
         }
     }

@@ -1,1 +1,1 @@
-{"volume":0.6453703045845032,"mouseSensitivity":0.27796295285224917}
+{"volume":0.7463635802268982,"mouseSensitivity":1.0}

@@ -36,6 +36,8 @@ public class PlayerInput : MonoBehaviour {
     public bool run {get; private set;}
     public bool dash;
     public bool jump {get; private set;}
+    public bool fly;
+    
     public bool findSight {get; private set;}
 
     public bool weapon1 {get; private set;}
@@ -77,6 +79,8 @@ public class PlayerInput : MonoBehaviour {
         run = Input.GetButton(runButtonName);
         dash = Input.GetButtonDown(runButtonName);
         jump = Input.GetButtonDown(jumpButtonName);
+        fly = Input.GetButton(jumpButtonName);
+
         mouseX = Input.GetAxis(mousex);
         mouseY = Input.GetAxis(mousey);
         findSight = Input.GetButton(findsight);

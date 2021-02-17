@@ -21,15 +21,15 @@ public class FireBall : MonoBehaviour
         canAttack = true;
     }
 
-    private void OnTriggerEnter(Collider other) {
-        Enemy _enemy = other.GetComponent<Enemy>();
-        CapsuleCollider temp = new CapsuleCollider();
-        if(_enemy != null && canAttack){
-            canAttack = false;
-            _enemy.OnDamage(damage, false, _enemy.enemyRenderer.transform.position, Vector3.one, temp);
-            RemoveBall();
-        }
-    }
+    // private void OnTriggerEnter(Collider other) {
+    //     Enemy _enemy = other.GetComponent<Enemy>();
+    //     CapsuleCollider temp = new CapsuleCollider();
+    //     if(_enemy != null && canAttack){
+    //         canAttack = false;
+    //         _enemy.OnDamage(damage, false, _enemy.enemyRenderer.transform.position, Vector3.one, temp);
+    //         RemoveBall();
+    //     }
+    // }
 
     public void SetRemoveTime(int _time){
         Invoke("RemoveBall", _time);
@@ -56,10 +56,20 @@ public class FireBall : MonoBehaviour
         System.Array.Sort(closeEnemys, (a, b) => Vector3.Distance(a.transform.position, transform.position) < Vector3.Distance(b.transform.position, transform.position) ? -1:1);
 
         if(closeEnemys.Length > 0){
-            Enemy target = closeEnemys[0].GetComponent<Enemy>();
+            LivingEntity target = closeEnemys[0].GetComponent<LivingEntity>();
             while(gameObject && target){
-                Vector3 _curvel = (target.transform.position + Vector3.up * target.capsuleCollider.bounds.extents.y - transform.position).normalized;
+                Enemy isEnemy = target.GetComponent<Enemy>();
+                Vector3 targetPos;
+                if(isEnemy != null) targetPos = isEnemy.transform.position + isEnemy.posCollider.center;
+                else targetPos = target.transform.position;
+
+                Vector3 _curvel = (targetPos - transform.position).normalized;
                 myRigid.velocity = Vector3.Lerp(myRigid.velocity.normalized, _curvel, 0.3f) * ballSpeed;
+
+                if(Vector3.Distance(transform.position, targetPos) < 1f){
+                    target.OnDamage(damage, false, targetPos, Vector3.one, new CapsuleCollider());
+                    RemoveBall();
+                }
                 yield return null;
             }
         }

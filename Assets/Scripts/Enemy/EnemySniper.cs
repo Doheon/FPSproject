@@ -15,12 +15,12 @@ public class EnemySniper : Enemy
             GameObject bullet = ObjectPoolingManager.instance.GetQueue(ObjectPoolingManager.instance.bulletQueue);
 
             if(bullet != null){
-                bullet.transform.position = transform.position + Vector3.up * capsuleCollider.bounds.extents.y *2;
+                bullet.transform.position = FirePosition.position;
                 Bullet _bullet = bullet.GetComponent<Bullet>();
                 _bullet.damage = damage;
 
                 _bullet.SetRemoveTime(5);
-                _bullet.SetVelocity(70f);
+                _bullet.SetVelocity(90f);
             }
             lastAttackTime = Time.time;
         }

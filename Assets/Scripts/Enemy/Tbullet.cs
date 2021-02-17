@@ -6,6 +6,8 @@ public class Tbullet : Bullet
 {
     private Vector3 startVelocity;
 
+
+
     public override void RemoveBullet(){
         if(gameObject.activeSelf){
             ObjectPoolingManager.instance.InsertQueue(gameObject, ObjectPoolingManager.instance.tBulletQueue);

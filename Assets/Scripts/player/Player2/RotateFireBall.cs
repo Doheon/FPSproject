@@ -14,6 +14,7 @@ public class RotateFireBall : MonoBehaviour
     private Enemy target;
     private RaycastHit hitInfo;
     public PlayerStatus player;
+    public LivingEntity playerLiving;
     private bool hasTarget;
 
     private float startT;
@@ -25,6 +26,7 @@ public class RotateFireBall : MonoBehaviour
     {
         myRigid = GetComponent<Rigidbody>();
         player = FindObjectOfType<PlayerStatus>();
+        playerLiving = player.GetComponent<LivingEntity>();
     }
 
 
@@ -40,23 +42,29 @@ public class RotateFireBall : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        Enemy _enemy = other.GetComponent<Enemy>();
-        if(_enemy != null){
+        LivingEntity _enemy = other.GetComponent<LivingEntity>();
+        if( _enemy != null && _enemy != playerLiving){
             hasTarget = true;
             StartCoroutine(TrackEnemyCoroutine(_enemy));
         }
     }
-    IEnumerator TrackEnemyCoroutine(Enemy _enemy){
+    IEnumerator TrackEnemyCoroutine(LivingEntity _enemy){
         while(gameObject){
             if(_enemy == null) {
                 hasTarget = false;
                 break;
             }
-            Vector3 _target = _enemy.enemyRenderer.transform.position;
+
+            Vector3 _target;
+            Enemy isEnemy = _enemy.GetComponent<Enemy>();
+            if(isEnemy != null) _target = isEnemy.transform.position + isEnemy.posCollider.center;
+            else _target = _enemy.transform.position;
+
             Vector3 _curVel = (_target - transform.position).normalized;
             myRigid.velocity = Vector3.Lerp(myRigid.velocity.normalized, _curVel, 0.3f) * ballSpeed;
+            
             if(Vector3.Distance(transform.position, _target) < 1f){
-                _enemy.OnDamage(damage, false, _enemy.enemyRenderer.transform.position, Vector3.one, new CapsuleCollider());
+                _enemy.OnDamage(damage, false, _enemy.transform.position, Vector3.one, new CapsuleCollider());
                 RemoveBall();
             }
             yield return null;
