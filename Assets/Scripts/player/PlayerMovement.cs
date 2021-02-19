@@ -58,6 +58,18 @@ public class PlayerMovement : MonoBehaviour {
     }
 
 
+    // --------about jump-------
+    private void TryJump(Vector3 _velocity){
+        if(PlayerInput.instance.jump && curJump >0){
+            curJump--;
+            Jump(_velocity);
+        }
+    }
+    private void Jump(Vector3 _velocity){
+        _velocity += jumpForce * Vector3.up;
+    }
+    //--------------------------
+
     //------------about move---------
 
     private void CheckMove(){
@@ -74,28 +86,23 @@ public class PlayerMovement : MonoBehaviour {
             Vector3 _verticalVelocity = transform.forward * _moveVertical;
             Vector3 _horizontalVelocity = transform.right * _moveHorizontal;
             direction = (_verticalVelocity + _horizontalVelocity).normalized;
-            
-            //direction += addDirection;
-            Jump();
-            Run();
+            if(PlayerInput.instance.jump && curJump > 1){
+                curJump--;
+                yVelocity = jumpForce;
+            }
 
-            Vector3 velocity = direction * applySpeed;
-            if(!controller.isGrounded) yVelocity -= gravity * Time.deltaTime;
-            direction.y = yVelocity;
         }
         else direction = Vector3.zero;
+
+        direction += addDirection;
+        Run();
+
+        Vector3 velocity = direction * applySpeed;
+        if(controller.isGrounded) curJump = jumpNumber;
+        else yVelocity -= gravity * Time.deltaTime;
+        direction.y = yVelocity;
         controller.Move(direction * applySpeed * Time.deltaTime);
     }
-
-    public virtual void Jump(){
-        if(controller.isGrounded) curJump = jumpNumber;
-        if(PlayerInput.instance.jump && curJump > 0){
-            curJump--;
-            yVelocity = jumpForce;
-        }
-    }
-
-
 
     public void AdditionalMove(Vector3 _direction, float _time){
         StartCoroutine(AdditionalMoveCoroutine(_direction, _time));

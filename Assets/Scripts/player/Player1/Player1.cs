@@ -69,7 +69,7 @@ public class Player1 : PlayerStatus
 
     public float skill3Damage{
         get{
-            return skillDam/10f *(skill3Level * 5f + 5f);
+            return attackDamage/10f *(skill3Level * 5f + 5f);
         }
     }
 

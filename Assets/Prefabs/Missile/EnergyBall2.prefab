@@ -4788,4 +4788,3 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   canAttack: 0
-  stunMat: {fileID: 2100000, guid: 24f62bdd1dc10df4892db00c38342095, type: 2}

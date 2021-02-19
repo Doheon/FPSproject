@@ -23,8 +23,6 @@ public class GameManager : MonoBehaviour
 
     private static GameManager m_instance;
 
-    public GameObject[] players;
-
     public event Action PlayerLevelUp;
     public Action StageClear;
 
@@ -67,11 +65,6 @@ public class GameManager : MonoBehaviour
             // 자신을 파괴
             Destroy(gameObject);
         }
-
-        for(int i=0; i<3; i++){
-            if(i==PlayerManager.playernum) players[i].SetActive(true);
-            else players[i].SetActive(false);
-        }
     }
 
     private void Start() {
@@ -80,7 +73,6 @@ public class GameManager : MonoBehaviour
         isStart = false;
 
         FindObjectOfType<PlayerStatus>().onDeath += GameOver;
-
     }
 
     //커서 잠금, 잠금해제

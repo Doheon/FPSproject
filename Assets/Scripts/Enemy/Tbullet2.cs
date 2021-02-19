@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//유도탄, 처음방향은 정해져 있고 일정거리 이동후 플레이어를 향함
 public class Tbullet2 : Bullet
 {
     private Vector3 startVelocity;

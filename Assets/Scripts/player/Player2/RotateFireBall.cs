@@ -14,7 +14,6 @@ public class RotateFireBall : MonoBehaviour
     private Enemy target;
     private RaycastHit hitInfo;
     public PlayerStatus player;
-    public LivingEntity playerLiving;
     private bool hasTarget;
 
     private float startT;
@@ -26,13 +25,13 @@ public class RotateFireBall : MonoBehaviour
     {
         myRigid = GetComponent<Rigidbody>();
         player = FindObjectOfType<PlayerStatus>();
-        playerLiving = player.GetComponent<LivingEntity>();
     }
 
 
 
     private void Update() {
         if(!hasTarget) SetVelocity();
+        CheckDistance();
     }
 
     private void OnEnable() {
@@ -42,29 +41,23 @@ public class RotateFireBall : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        LivingEntity _enemy = other.GetComponent<LivingEntity>();
-        if( _enemy != null && _enemy != playerLiving){
+        Enemy _enemy = other.GetComponent<Enemy>();
+        if(_enemy != null){
             hasTarget = true;
             StartCoroutine(TrackEnemyCoroutine(_enemy));
         }
     }
-    IEnumerator TrackEnemyCoroutine(LivingEntity _enemy){
+    IEnumerator TrackEnemyCoroutine(Enemy _enemy){
         while(gameObject){
             if(_enemy == null) {
                 hasTarget = false;
                 break;
             }
-
-            Vector3 _target;
-            Enemy isEnemy = _enemy.GetComponent<Enemy>();
-            if(isEnemy != null) _target = isEnemy.transform.position + isEnemy.posCollider.center;
-            else _target = _enemy.transform.position;
-
+            Vector3 _target = _enemy.enemyRenderer.transform.position;
             Vector3 _curVel = (_target - transform.position).normalized;
             myRigid.velocity = Vector3.Lerp(myRigid.velocity.normalized, _curVel, 0.3f) * ballSpeed;
-            
             if(Vector3.Distance(transform.position, _target) < 1f){
-                _enemy.OnDamage(damage, false, _enemy.transform.position, Vector3.one, new CapsuleCollider());
+                _enemy.OnDamage(damage, false, _enemy.enemyRenderer.transform.position, Vector3.one, new CapsuleCollider());
                 RemoveBall();
             }
             yield return null;
@@ -85,11 +78,15 @@ public class RotateFireBall : MonoBehaviour
 
     public void SetVelocity(){
         Vector3 _center = player.transform.position;
-        if(curRadius < radius) curRadius += 0.1f;
-        else curRadius = radius;
-
+        // curRadius = radius;
+        curRadius += 0.2f;
         Vector3 _pos = new Vector3(Mathf.Cos((startT + Time.time) * ballSpeed / curRadius), 0f, Mathf.Sin((startT + Time.time) * ballSpeed / curRadius)) * curRadius + _center;
         myRigid.MovePosition(_pos);
+    }
+
+    public void CheckDistance(){
+        Vector3 _center = player.transform.position;
+         if(Vector3.Distance(_center, transform.position) > 15f) RemoveBall();
     }
 
 

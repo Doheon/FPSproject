@@ -22,11 +22,12 @@ public class Player2 : PlayerStatus
 
     public float skill1Damage{
         get{
-            return skillDam/50f *(skill1Level * 2f + 5f);
+            return attackDamage/50f *(skill1Level * 2f + 5f);
         }
     }
 
     public float lastSkill1Time = -100f;
+
 
     //skill2
     public int skill2Level;
@@ -44,14 +45,13 @@ public class Player2 : PlayerStatus
     }
     public float skill2Damage{
         get{
-            return skillDam / 20f * (skill2Level *5f + 3f);
+            return attackDamage / 20f * (skill2Level *5f + 3f);
         }
     }
     public float lastSkill2Time = -100f;
 
     public LayerMask targetlayer;
     public ParticleSystem skill2Effect;
-    public Material stunMat;
 
 
     //skill3.
@@ -67,7 +67,7 @@ public class Player2 : PlayerStatus
 
     public float skill3Damage{
         get{
-            return skillDam/100f *(skill3Level * 5f + 5f);
+            return attackDamage/100f *(skill3Level * 5f + 5f);
         }
     }
 
@@ -198,7 +198,7 @@ public class Player2 : PlayerStatus
             if(colliders[i].GetType().Equals(typeof(SphereCollider))){
                 Enemy _enemy = colliders[i].GetComponent<Enemy>();
                 if(_enemy) _enemy.OnDamage(skill2Damage, false, colliders[i].transform.position, Vector3.zero, colliders[i]);
-                if(_enemy) _enemy.Stun(skill2Stuntime, stunMat);
+                if(_enemy) _enemy.Stun(skill2Stuntime);
             }
         }
     }

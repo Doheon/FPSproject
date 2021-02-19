@@ -9,6 +9,7 @@ public class EnemyBoss1 : Enemy
     public Enemy spawned;
     public int spawnCount;
     public GameObject projector;
+    public Animator animator;
     
     public Image fillImage;
     public TextMeshProUGUI healthText;
@@ -50,7 +51,7 @@ public class EnemyBoss1 : Enemy
     public void DoPattern(){
         if(hasTarget && Time.time > lastAttackTime + fireRate){
             lastAttackTime = Time.time;
-            enemyAnimator.SetBool("Shoot Attack", false);
+            
             int _seed = Random.Range(0,6); 
             
             if(_seed >=4) {
@@ -84,11 +85,10 @@ public class EnemyBoss1 : Enemy
     }
 
     public override void ShootBullet(){
-        enemyAnimator.SetBool("Shoot Attack", true);
         for(int i=0; i<10; i++){
             GameObject bullet = ObjectPoolingManager.instance.GetQueue(ObjectPoolingManager.instance.tBullet2Queue);
             if(bullet != null){
-                bullet.transform.position = FirePosition.position;
+                bullet.transform.position = transform.position + Vector3.up * capsuleCollider.bounds.extents.y;
 
                 Tbullet2 _bullet = bullet.GetComponent<Tbullet2>();
                 _bullet.damage = damage;
@@ -109,9 +109,9 @@ public class EnemyBoss1 : Enemy
         isCharging = true;
 
         yield return new WaitForSeconds(3f);
-        enemyAnimator.SetTrigger("Ultimate Attack");
+        animator.SetBool("Jump", true);
         yield return new WaitForSeconds(0.5f);
-
+        animator.SetBool("Jump", false);
 
         Collider[] players = Physics.OverlapSphere(transform.position, 68f, TargetLayer);
         if(players.Length >0){

@@ -37,7 +37,7 @@ public class StageClear : MonoBehaviour
     }
 
 
-    Set AttackDamage, AttackSpeed, CriticalDamage, CriticalProb, HP, Armor, SkillHaste, SkillDamage, LifeSteal;
+    Set AttackDamage, AttackSpeed, CriticalDamage, CriticalProb, HP, Armor, SkillHaste, MoveSpeed, LifeSteal;
     void Start()
     {
         player = FindObjectOfType<PlayerStatus>();
@@ -55,7 +55,7 @@ public class StageClear : MonoBehaviour
         valList.Add(new List<float>{60f, 80f, 100f, 130f}); //HP
         valList.Add(new List<float>{30f, 45f, 60f, 80f}); //armor
         valList.Add(new List<float>{25f, 40f, 55f, 70f}); //skill haste
-        valList.Add(new List<float>{20f, 40f, 60f, 90f}); //skill damage
+        valList.Add(new List<float>{20f, 30f, 40f, 50f}); //speed
         valList.Add(new List<float>{2f, 4f, 6f, 10f}); //life steal
 
         AttackDamage = new Set(player.AddAttackDamage);
@@ -65,7 +65,7 @@ public class StageClear : MonoBehaviour
         HP = new Set(player.AddHP);
         Armor = new Set(player.AddArmor);
         SkillHaste = new Set(player.AddSkillHaste);
-        SkillDamage = new Set(player.AddSkillDamage);
+        MoveSpeed = new Set(player.AddMoveSpeed);
         LifeSteal = new Set(player.AddLifeSteal);
 
         funcList.Add(AttackDamage);
@@ -75,7 +75,7 @@ public class StageClear : MonoBehaviour
         funcList.Add(HP);
         funcList.Add(Armor);
         funcList.Add(SkillHaste);
-        funcList.Add(SkillDamage);
+        funcList.Add(MoveSpeed);
         funcList.Add(LifeSteal);
 
         textList.Add("Attack\r\nDamage\r\n+");
@@ -85,7 +85,7 @@ public class StageClear : MonoBehaviour
         textList.Add("HP\r\n+");
         textList.Add("Armor\r\n+");
         textList.Add("Skill\r\nHaste\r\n+");
-        textList.Add("Skill\r\nDamage\r\n+");
+        textList.Add("Move\r\nSpeed\r\n+");
         textList.Add("Life\r\nSteal\r\n+");
     }
 

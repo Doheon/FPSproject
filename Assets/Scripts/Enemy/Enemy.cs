@@ -4,20 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 
-public class Enemy : LivingEntity, Stopable
+public class Enemy : LivingEntity
 {
     public Slider hpSlider;
     public float damage = 20f;
     public float fireRate;
     public float exp;
     public float lastAttackTime;
-    public Transform FirePosition;
-    public SphereCollider posCollider;
-
 
     public Renderer enemyRenderer;
     public Material stunMaterial;
-    private Material oriMaterial;
+    public CapsuleCollider capsuleCollider;
 
     public LayerMask TargetLayer;
     public LivingEntity targetEntity;
@@ -27,7 +24,6 @@ public class Enemy : LivingEntity, Stopable
     public bool isStunned;
 
     public NavMeshAgent pathFinder;
-    public Animator enemyAnimator;
 
     private Coroutine hpsliderCoroutine;
     public PlayerStatus player;
@@ -37,9 +33,7 @@ public class Enemy : LivingEntity, Stopable
 
     public bool hasTarget{
         get{
-            if(targetEntity != null && !targetEntity.dead && GameManager.instance.isStart) {
-                return true;
-            }
+            if(targetEntity != null && !targetEntity.dead && GameManager.instance.isStart) return true;
             return false;
         }
     }
@@ -48,10 +42,8 @@ public class Enemy : LivingEntity, Stopable
     public virtual void Awake()
     {
         pathFinder = GetComponent<NavMeshAgent>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
         player = FindObjectOfType<PlayerStatus>();
-        enemyAnimator = GetComponent<Animator>();
-
-        oriMaterial = enemyRenderer.material;
 
         lastAttackTime = 0f;
         hpSlider.maxValue = startHP;
@@ -114,8 +106,13 @@ public class Enemy : LivingEntity, Stopable
             Collider[] colliders = Physics.OverlapSphere(transform.position, sightDistance, TargetLayer);
             if(colliders.Length > 0){
                 LivingEntity livingEntity = colliders[0].GetComponent<LivingEntity>();
-                targetEntity = livingEntity;
-                pathFinder.SetDestination(targetEntity.transform.position);
+                //Vector3 _direction = (livingEntity.transform.position - transform.position - Vector3.up * 2).normalized;
+                //if(Physics.Raycast(transform.position + Vector3.up * 2 * capsuleCollider.bounds.extents.y, _direction, out RaycastHit _hit, sightDistance)){
+                    //if(_hit.transform.tag == "Player"){
+                        targetEntity = livingEntity;
+                        pathFinder.SetDestination(targetEntity.transform.position);
+                    //}
+                //}
             }
             if(!hasTarget){
                 pathFinder.SetDestination(transform.position + new Vector3(Random.Range(-10f,10f), 0f,Random.Range(-10f,10f)));
@@ -151,38 +148,24 @@ public class Enemy : LivingEntity, Stopable
         }
     }
 
-
-    Coroutine stunCoroutine;
-
-    public void Stun(float _time, Material _stunMat){
-        if(stunCoroutine != null) StopCoroutine(stunCoroutine);
-        stunCoroutine = StartCoroutine(StunCoroutine(_time, _stunMat));
+    public void Stun(float _time){
+        StartCoroutine(StunCoroutine(_time));
     }
 
-    IEnumerator StunCoroutine(float _time, Material _stunMat){
+    IEnumerator StunCoroutine(float _time){
         isStunned = true;
-        enemyRenderer.material = _stunMat;
+        Material _ori = enemyRenderer.material;
+        enemyRenderer.material = stunMaterial;
         yield return new WaitForSeconds(_time);
         isStunned = false;
-        enemyRenderer.material = oriMaterial;
-    }
-
-    Coroutine stopCoroutine;
-    public void Stop(float _time){
-        if(stopCoroutine != null) StopCoroutine(stopCoroutine);
-        stopCoroutine = StartCoroutine(StopEnemyCoroutine(_time));
-    }
-    IEnumerator StopEnemyCoroutine(float _time){
-        isStunned = true;
-        yield return new WaitForSeconds(_time);
-        isStunned = false;
+        enemyRenderer.material = _ori;
     }
 
     //die
     public override void Die()
     {
         base.Die();
-        Destroy(gameObject);
+        pathFinder.enabled = false;
     }
 
 }

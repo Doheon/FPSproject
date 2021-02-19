@@ -26,7 +26,6 @@ public class Gun : MonoBehaviour
             return playerStatus.autoAimMode;
         }
     }
-
     public float lastFireTime;
     public int bulletConsume{
         get{
@@ -50,7 +49,6 @@ public class Gun : MonoBehaviour
     public int currentBullet; //현재 총알
     public int maxBullet;  //최대탄창
     public float retroActionForce;
-    public bool isFire = false;
 
     public Vector3 originPos;
 
@@ -61,7 +59,6 @@ public class Gun : MonoBehaviour
 
     public Camera theCam;
     public GameObject hit_effect_prefab;
-    
 
     public LayerMask targetLayer;
     public string targetTag = "Enemy"; //autohit에서 사용
@@ -108,6 +105,7 @@ public class Gun : MonoBehaviour
     public void Shot(){
         muzzleFlash.Play();
         gunAudioPlayer.PlayOneShot(shotClip);
+        //theCrosshair.fireAnimation();
 
         currentBullet -= bulletConsume;
         if(currentBullet <=0){
@@ -116,9 +114,6 @@ public class Gun : MonoBehaviour
 
         if(autoAimMode) AutoHit();
         else Hit();
-
-        if(playerStatus.explosionMode) 
-
         //반동
         transform.localPosition = originPos;
         
@@ -154,7 +149,7 @@ public class Gun : MonoBehaviour
 
 
     public virtual void Hit(){ //총알부딪힌거 
-        if(Physics.Raycast(theCam.transform.position, theCam.transform.forward, out hitInfo, range, (-1) - (1<<11) )){
+        if(Physics.Raycast(theCam.transform.position, theCam.transform.forward, out hitInfo, range,  (-1) - (1<<11) )){
             GameObject clone = Instantiate(hit_effect_prefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
             Destroy(clone, 1f);
             IDamageable target = hitInfo.collider.GetComponent<IDamageable>();
@@ -163,8 +158,6 @@ public class Gun : MonoBehaviour
                 playerStatus.RestoreHealth(damage * playerStatus.lifeSteal / 100f);
             }
         }
-        isFire = true;
-
     }
 
 
@@ -176,8 +169,10 @@ public class Gun : MonoBehaviour
                 if(Physics.Raycast(theCam.transform.position, (hits[i].point - theCam.transform.position).normalized, out hitInfo, range, (-1) - (1<<11))){;
                     if(hitInfo.transform.GetComponent<IDamageable>() == target){
                         Enemy _enemy = hitInfo.transform.GetComponent<Enemy>();
-                        if(_enemy != null) UIManager.instance.DisplayTarget(_enemy.transform, _enemy.transform.position + _enemy.posCollider.center); //enemy
-                        else UIManager.instance.DisplayTarget(hitInfo.transform, hitInfo.transform.position); //expball
+                        if(_enemy != null){
+                            UIManager.instance.DisplayTarget(_enemy.enemyRenderer.transform);
+                        }
+                        else UIManager.instance.DisplayTarget(hitInfo.transform);
                         target.OnDamage(damage, isCrit, hits[i].point, hits[i].normal, hits[i].collider);
                         playerStatus.RestoreHealth(damage * playerStatus.lifeSteal / 100f);
                         return;
@@ -186,8 +181,6 @@ public class Gun : MonoBehaviour
             }
         }
     }
-    
-
 
     //------------------장전--------------------
     public bool Reload(){

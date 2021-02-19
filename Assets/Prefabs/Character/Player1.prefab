@@ -154,9 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gun: {fileID: 5568032826284678126}
   theCam: {fileID: 2334940876721202369}
-  weaponCam: {fileID: 0}
   gunHolder: {fileID: 2334940876480947740}
-  isSniperMode: 0
 --- !u!114 &980432337444576490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,7 +177,6 @@ MonoBehaviour:
   mousey: Mouse Y
   findsight: Fire2
   dash: 0
-  fly: 0
 --- !u!114 &9072497785920320692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,7 +223,6 @@ MonoBehaviour:
   attackDamage: 100
   criticalProb: 0
   criticalDam: 200
-  skillDam: 100
   armor: 0
   skillHaste: 0
   attackSpeed: 100
@@ -234,12 +230,10 @@ MonoBehaviour:
   moveSpeed: 100
   bulletConsume: 1
   autoAimMode: 0
-  explosionMode: 0
   isNodamage: 0
   hpGrouth: 10
   adGrouth: 10
   hitAnim: {fileID: 0}
-  playerMovement: {fileID: 0}
   skill1Level: 0
   maxSkill1Level: 3
   Skill1BaseCoolTime: 40
@@ -2400,7 +2394,11 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.050904155
+<<<<<<< HEAD
+  m_Volume: 0.05
+=======
+  m_Volume: 0.6453703
+>>>>>>> parent of 085d75d... 0.5v first playable version
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2507,7 +2505,6 @@ MonoBehaviour:
   currentBullet: 5
   maxBullet: 5
   retroActionForce: 0.2
-  isFire: 0
   originPos: {x: 0, y: 0, z: 0}
   theCam: {fileID: 2334940876721202369}
   hit_effect_prefab: {fileID: 695070236707283431, guid: 7e6bc9a1a90ffae488d7b5db1774fafd, type: 3}
@@ -2786,7 +2783,11 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.050904155
+<<<<<<< HEAD
+  m_Volume: 0.05
+=======
+  m_Volume: 0.6453703
+>>>>>>> parent of 085d75d... 0.5v first playable version
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2893,7 +2894,6 @@ MonoBehaviour:
   currentBullet: 5
   maxBullet: 5
   retroActionForce: 0.1
-  isFire: 0
   originPos: {x: 0, y: 0, z: 0}
   theCam: {fileID: 2334940876721202369}
   hit_effect_prefab: {fileID: 695070236707283431, guid: 7e6bc9a1a90ffae488d7b5db1774fafd, type: 3}
@@ -5278,7 +5278,6 @@ MonoBehaviour:
   currentBullet: 30
   maxBullet: 30
   retroActionForce: 0.03
-  isFire: 0
   originPos: {x: 0, y: 0, z: 0}
   theCam: {fileID: 2334940876721202369}
   hit_effect_prefab: {fileID: 695070236707283431, guid: 7e6bc9a1a90ffae488d7b5db1774fafd, type: 3}
@@ -5306,7 +5305,11 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.050904155
+<<<<<<< HEAD
+  m_Volume: 0.05
+=======
+  m_Volume: 0.6453703
+>>>>>>> parent of 085d75d... 0.5v first playable version
   m_Pitch: 1
   Loop: 0
   Mute: 0

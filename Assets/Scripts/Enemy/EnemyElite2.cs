@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemyElite2 : Enemy
 {
     public GameObject shield;
-    public Transform firePosition2;
 
     public float shieldCoolTime = 5f;
     public float shieldTime = 2f;
@@ -35,21 +34,16 @@ public class EnemyElite2 : Enemy
     public override void ShootBullet(){
         if(hasTarget && Time.time > lastAttackTime + fireRate){
             for(int i=0; i<3; i++){
-                GameObject bullet1 = ObjectPoolingManager.instance.GetQueue(ObjectPoolingManager.instance.tBullet2Queue);
-                GameObject bullet2 = ObjectPoolingManager.instance.GetQueue(ObjectPoolingManager.instance.tBullet2Queue); 
-                if(bullet1 != null){
-                    bullet1.transform.position = FirePosition.position;
-                    bullet2.transform.position = firePosition2.position;
+                GameObject bullet = ObjectPoolingManager.instance.GetQueue(ObjectPoolingManager.instance.tBullet2Queue);
 
-                    Tbullet2 _bullet1 = bullet1.GetComponent<Tbullet2>();
-                    _bullet1.damage = damage;
-                    _bullet1.SetRemoveTime(1);
-                    _bullet1.SetVelocityStart(30f,transform.forward + transform.right * (i-1), 0.05f);
+                if(bullet != null){
+                    bullet.transform.position = transform.position + Vector3.up * capsuleCollider.bounds.extents.y;
 
-                    Tbullet2 _bullet2 = bullet2.GetComponent<Tbullet2>();
-                    _bullet2.damage = damage;
-                    _bullet2.SetRemoveTime(1);
-                    _bullet2.SetVelocityStart(30f,transform.forward + transform.right * (i-1), 0.05f);
+                    Tbullet2 _bullet = bullet.GetComponent<Tbullet2>();
+                    _bullet.damage = damage;
+                    
+                    _bullet.SetRemoveTime(1);
+                    _bullet.SetVelocityStart(50f,transform.forward + transform.right * (i-1), 0.05f);
                 }
             }
             lastAttackTime = Time.time;
