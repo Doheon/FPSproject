@@ -29,7 +29,7 @@ public class InfoTab : MonoBehaviour
         texts[3].text = player.criticalProb.ToString() + "%";
         texts[4].text = player.armor.ToString() + "(-" + Mathf.RoundToInt(player.damageReduction * 100f) + "%)";
         texts[5].text = player.skillHaste.ToString() + "(-" + Mathf.RoundToInt(player.coolReduction * 100f) + "%)";
-        texts[6].text = player.moveSpeed.ToString() + "%";
+        texts[6].text = player.skillDam.ToString() + "%";
         texts[7].text = player.lifeSteal + "%";
     }
 }

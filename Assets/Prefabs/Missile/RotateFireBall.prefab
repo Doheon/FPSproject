@@ -4787,4 +4787,3 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   player: {fileID: 0}
-  playerLiving: {fileID: 0}

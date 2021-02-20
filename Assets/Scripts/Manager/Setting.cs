@@ -54,14 +54,14 @@ public class Setting : MonoBehaviour
     public void MasterVolume(float _volume){
         volume = _volume;
         for(int i = 0; i<audioAll.Length; i++){
-            audioAll[i].volume = _volume;
+            audioAll[i].volume = volume/10f;
         }
         audioText.text = Mathf.RoundToInt(_volume * 100f).ToString();
     }
 
     public void MouseSensitivity(float _sen){
         mouseSensitivity = _sen;
-        playerMovement.lookSensitivity = 30f + _sen * 300f;
+        playerMovement.lookSensitivity = 30f + _sen * 100f;
         sensitivityText.text = Mathf.RoundToInt(_sen * 100f).ToString();
     }
 
@@ -78,7 +78,7 @@ public class Setting : MonoBehaviour
             string loadJson = File.ReadAllText(SAVE_DATA_DIRECTORY + SAVE_FILENAME);
             saveSetting = JsonUtility.FromJson<SaveSetting>(loadJson);
 
-            MasterVolume(saveSetting.volume);
+            MasterVolume(saveSetting.volume );
             MouseSensitivity(saveSetting.mouseSensitivity);
         }
     }

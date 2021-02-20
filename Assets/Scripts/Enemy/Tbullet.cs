@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//유도탄, 처음 방향이 바로 플레이어를 향함
 public class Tbullet : Bullet
 {
     private Vector3 startVelocity;
+
+
 
     public override void RemoveBullet(){
         if(gameObject.activeSelf){

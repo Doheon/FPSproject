@@ -12,7 +12,8 @@ public class PlayerStatus : LivingEntity
     public float attackDamage = 100f;
     public float criticalProb = 0f;
     public float criticalDam = 200f;
-
+    public float skillDam = 100f;
+    
     public float armor = 0f;
     public float damageReduction{
         get{
@@ -34,6 +35,8 @@ public class PlayerStatus : LivingEntity
 
     public int bulletConsume = 1;
     public bool autoAimMode = false;
+    public bool explosionMode = false;
+    
     public bool isNodamage;
 
 
@@ -45,7 +48,7 @@ public class PlayerStatus : LivingEntity
     private Quaternion originRot;
     //component
     public Animator hitAnim;
-    private PlayerMovement playerMovement;
+    public PlayerMovement playerMovement;
 
 
     public virtual void Awake() {
@@ -171,8 +174,8 @@ public class PlayerStatus : LivingEntity
     public void AddSkillHaste(float _val){
         skillHaste += _val;
     }
-    public void AddMoveSpeed(float _val){
-        moveSpeed += _val;
+    public void AddSkillDamage(float _val){
+        skillDam += _val;
     }
     public void AddLifeSteal(float _val){
         lifeSteal += _val;

@@ -16,6 +16,8 @@ public class EnergyBall : MonoBehaviour
     private RaycastHit hitInfo;
     public bool canAttack;
 
+    public Material stunMat;
+
     void Awake()
     {
         myRigid = GetComponent<Rigidbody>();
@@ -27,7 +29,7 @@ public class EnergyBall : MonoBehaviour
         CapsuleCollider temp = new CapsuleCollider();
         if(_enemy != null && canAttack){
             canAttack = false;
-            _enemy.Stun(stunTime);
+            _enemy.Stun(stunTime, stunMat);
             _enemy.OnDamage(damage, false, other.transform.position, Vector3.one, temp);
             RemoveBall();
         }
@@ -55,7 +57,7 @@ public class EnergyBall : MonoBehaviour
     IEnumerator TrackEnemyCoroutine(){
         yield return new WaitForSeconds(0.1f);
         while(gameObject.activeSelf && target.gameObject.activeSelf){
-            Vector3 curVelocity = (target.transform.position + Vector3.up * target.capsuleCollider.bounds.extents.y - transform.position).normalized;
+            Vector3 curVelocity = (target.transform.position + target.posCollider.center - transform.position).normalized;
             myRigid.velocity = Vector3.Lerp(myRigid.velocity.normalized, curVelocity, 0.3f) * ballSpeed;
             transform.up = curVelocity;
             yield return null;

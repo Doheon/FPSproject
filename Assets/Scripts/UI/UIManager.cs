@@ -153,11 +153,11 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void DisplayTarget(Transform _hitTarget){
+    public void DisplayTarget(Transform _hitTarget, Vector3 _targetPos){
         GameObject _targetImage = Instantiate(targeting, Vector3.zero, Quaternion.identity, transform);
-        _targetImage.transform.position = mainCam.WorldToScreenPoint(_hitTarget.position);
+        _targetImage.transform.position = mainCam.WorldToScreenPoint(_targetPos);
         Destroy(_targetImage, 0.3f);
-        StartCoroutine(moveImage(_targetImage, _hitTarget));
+        StartCoroutine(moveImage(_targetImage, _hitTarget, _targetPos));
         
 
     }
@@ -177,9 +177,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator moveImage(GameObject _image, Transform _hitTarget){
+    private IEnumerator moveImage(GameObject _image, Transform _hitTarget, Vector3 _targetPos){
         while(_hitTarget && _image){
-            UpdateToWorld(_image, _hitTarget.position);
+            UpdateToWorld(_image, _targetPos);
             yield return null;
         }
     }
