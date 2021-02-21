@@ -73,5 +73,22 @@ public class TitleSetting : MonoBehaviour
         }
     }
 
+    public static string diffText{
+        get{
+            switch(difficulty){
+                case 1:
+                    return "Easy";
+                case 2:
+                    return "Normal";
+                case 3:
+                    return "Hard";
+                case 4:
+                    return "Hell";
+                default:
+                    return "Normal";
+            }
+        }
+    }
+
 
 }

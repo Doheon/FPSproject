@@ -47,6 +47,9 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI stageText;
     public TextMeshProUGUI enemyLeft;
 
+    //difficulty
+    public TextMeshProUGUI difficulty;
+
     //skill 1
     public Slider skill1CoolSlider;
     public Animator skill1LevelUp;
@@ -90,6 +93,10 @@ public class UIManager : MonoBehaviour
         skill2CoolSlider.value = skill2CoolSlider.maxValue;
         skill3CoolSlider.value = skill3CoolSlider.maxValue;
         expSlider.value = 0f;
+    }
+
+    public void updateDifficulty(){
+        difficulty.text = TitleSetting.diffText;
     }
     
     //text

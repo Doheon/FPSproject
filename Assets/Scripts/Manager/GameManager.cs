@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         ApplyCursorLock();
         StageClear += ChangeStage;
         isStart = false;
-
+        UIManager.instance.updateDifficulty();
         FindObjectOfType<PlayerStatus>().onDeath += GameOver;
 
     }

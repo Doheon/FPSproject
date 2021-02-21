@@ -88,6 +88,8 @@ public class RotateFireBall : MonoBehaviour
         if(curRadius < radius) curRadius += 0.1f;
         else curRadius = radius;
 
+        if(Time.time > startTime + 3f) RemoveBall();
+
         Vector3 _pos = new Vector3(Mathf.Cos((startT + Time.time) * ballSpeed / curRadius), 0f, Mathf.Sin((startT + Time.time) * ballSpeed / curRadius)) * curRadius + _center;
         myRigid.MovePosition(_pos);
     }
