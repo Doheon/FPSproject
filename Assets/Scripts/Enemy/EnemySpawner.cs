@@ -137,14 +137,14 @@ public class EnemySpawner : MonoBehaviour
             CreateEnemy(enemySniper, health/2, damage*2, 3f, exp, Color.white, pos, false);
         }
         pos = spawnPointsNormal[Random.Range(0, spawnPointsNormal.Length)];
-        CreateEnemy(enemyElite2, health * 5, damage, 3f, exp*2, Color.yellow, pos, false);
+        CreateEnemy(enemyElite2, health * 8, damage, 3f, exp*2, Color.yellow, pos, false);
         isClear = false;
     }
 
     private void EnemySpawn5(){
         Transform pos;
         pos = spawnPointBoss;
-        CreateEnemy(enemyBoss1, health*35f, damage, 3f, exp*10, Color.white, pos, true);
+        CreateEnemy(enemyBoss1, health*30f, damage, 3f, exp*10, Color.white, pos, true);
         isClear = false;
     }
 
