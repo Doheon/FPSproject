@@ -33,7 +33,7 @@ public class ExpBall : LivingEntity
         hpSlider.maxValue = startHP;
         hpSlider.value = startHP;
     }
-    public void SetRemoveTime(int _time){
+    public void SetRemoveTime(float _time){
         Invoke("RemoveExpBall", _time);
     }
     public void RemoveExpBall(){

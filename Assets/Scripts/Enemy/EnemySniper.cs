@@ -20,7 +20,7 @@ public class EnemySniper : Enemy
                 _bullet.damage = damage;
 
                 _bullet.SetRemoveTime(5);
-                _bullet.SetVelocity(90f);
+                _bullet.SetVelocity(TitleSetting.bulletSpeed*2f);
             }
             lastAttackTime = Time.time;
         }

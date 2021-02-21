@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Title : MonoBehaviour
 {
     public string sceneName = "GameStage";
-    public GameObject settingTab;
+    public GameObject difficulty;
     public GameObject titleMenu;
     public GameObject characterSelect;
     public GameObject howToPlay;
@@ -16,15 +16,15 @@ public class Title : MonoBehaviour
         characterSelect.SetActive(true);
     }
     public void ClickCharacter1(){
-        PlayerManager.playernum = 0;
+        TitleSetting.playernum = 0;
         SceneManager.LoadScene(sceneName);
     }
     public void ClickCharacter2(){
-        PlayerManager.playernum = 1;
+        TitleSetting.playernum = 1;
         SceneManager.LoadScene(sceneName);
     }
     public void ClickCharacter3(){
-        PlayerManager.playernum = 2;
+        TitleSetting.playernum = 2;
         SceneManager.LoadScene(sceneName);
     }
 
@@ -33,10 +33,25 @@ public class Title : MonoBehaviour
         howToPlay.SetActive(true);
     }
 
-
-    public void ClickSetting(){
+    public void ClickDifficulty(){
         titleMenu.SetActive(false);
-        settingTab.SetActive(true);
+        difficulty.SetActive(true);
+    }
+
+    public void ClickEasy(){
+        TitleSetting.difficulty = 1;
+    }
+
+    public void ClickNormal(){
+        TitleSetting.difficulty = 2;
+    }
+
+    public void ClickHard(){
+        TitleSetting.difficulty = 3;
+    }
+
+    public void ClickHell(){
+        TitleSetting.difficulty = 4;
     }
 
     public void ClickExit(){
@@ -44,7 +59,7 @@ public class Title : MonoBehaviour
     }
 
     public void ClickBack(){
-        settingTab.SetActive(false);
+        difficulty.SetActive(false);
         characterSelect.SetActive(false);
         howToPlay.SetActive(false);
         titleMenu.SetActive(true);

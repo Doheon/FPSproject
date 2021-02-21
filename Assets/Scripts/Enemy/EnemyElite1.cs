@@ -23,7 +23,7 @@ public class EnemyElite1 : Enemy
                 _bullet.damage = damage;
                 
                 _bullet.SetRemoveTime(2);
-                _bullet.SetVelocity(50f);
+                _bullet.SetVelocity(TitleSetting.bulletSpeed);
             }
             
         }        

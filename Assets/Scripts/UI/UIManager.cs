@@ -73,6 +73,10 @@ public class UIManager : MonoBehaviour
     //stageClear
     public Animator stageClearAnimator;
 
+    //gameend
+    public GameObject gameEnd;
+    public TextMeshProUGUI gameEndmsg;
+
 
 
     private void Start(){
@@ -260,6 +264,27 @@ public class UIManager : MonoBehaviour
     public void UpdateExp(float _cur, float _max){
         expSlider.maxValue = _max;
         expSlider.value = _cur;
+    }
+
+    public void GameEnd(){
+        gameEnd.SetActive(true);
+        string msg = "";
+        switch(TitleSetting.difficulty){
+            case 1:
+                msg = "You have cleared the Easy difficulty level. \nTry Normal difficulty.";
+                break;
+            case 2:
+                msg = "You have cleared the Normal difficulty level. \nYou are great! Try Hard difficulty.";
+                break;
+
+            case 3:
+                msg = "You have cleared the Hard difficulty level. \nI can't belive it. Try Hell difficulty.";
+                break;
+            case 4:
+                msg = "You have cleared the Hell difficulty level. \nYou are God.";
+                break;
+        }
+        gameEndmsg.text = msg;
     }
 
 }

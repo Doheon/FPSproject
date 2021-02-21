@@ -44,12 +44,12 @@ public class EnemyElite2 : Enemy
                     Tbullet2 _bullet1 = bullet1.GetComponent<Tbullet2>();
                     _bullet1.damage = damage;
                     _bullet1.SetRemoveTime(1);
-                    _bullet1.SetVelocityStart(30f,transform.forward + transform.right * (i-1), 0.05f);
+                    _bullet1.SetVelocityStart(TitleSetting.bulletSpeed * 0.6f,transform.forward + transform.right * (i-1), 0.05f);
 
                     Tbullet2 _bullet2 = bullet2.GetComponent<Tbullet2>();
                     _bullet2.damage = damage;
                     _bullet2.SetRemoveTime(1);
-                    _bullet2.SetVelocityStart(30f,transform.forward + transform.right * (i-1), 0.05f);
+                    _bullet2.SetVelocityStart(TitleSetting.bulletSpeed * 0.6f,transform.forward + transform.right * (i-1), 0.05f);
                 }
             }
             lastAttackTime = Time.time;

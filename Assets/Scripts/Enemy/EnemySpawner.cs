@@ -38,12 +38,12 @@ public class EnemySpawner : MonoBehaviour
     
     public float damage{
         get{
-            return ((stageMain-1) * 5 + stageSub)*10 + 10f;
+            return (((stageMain-1) * 5 + stageSub)*10 + 10f) * TitleSetting.enemyDamage;
         }
     }
     public float health{
         get{
-            return ((stageMain-1)*5 + stageSub) * 100 + 100f;
+            return (((stageMain-1)*5 + stageSub) * 100 + 100f)*TitleSetting.enemyHealth;
         }
     }
 
@@ -153,7 +153,7 @@ public class EnemySpawner : MonoBehaviour
         GameObject expBall = ObjectPoolingManager.instance.GetQueue(ObjectPoolingManager.instance.expBallQueue);
         expBall.transform.position = _enemy.transform.position + Vector3.up * 1.8f;
         ExpBall _expball = expBall.GetComponent<ExpBall>();
-        if(!_isBoss) _expball.SetRemoveTime(2);
+        if(!_isBoss) _expball.SetRemoveTime(TitleSetting.ballRemoveTime);
         _expball.SetExpBallHP(health/3);
         _expball.onDeath += () => _expball.DestroyExpBall(_exp);
     }

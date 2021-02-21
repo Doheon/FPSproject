@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         }
 
         for(int i=0; i<3; i++){
-            if(i==PlayerManager.playernum) players[i].SetActive(true);
+            if(i==TitleSetting.playernum) players[i].SetActive(true);
             else players[i].SetActive(false);
         }
     }
@@ -102,6 +102,7 @@ public class GameManager : MonoBehaviour
         else{
             subStage = 1;
             mainStage++;
+            if(mainStage == 2) GameEnd();
         }
     }
 
@@ -121,6 +122,12 @@ public class GameManager : MonoBehaviour
     public void GameOver(){
         isGameover = true;
         gameOverTab.SetActive(true);
+        ApplyCursorLock();
+    }
+
+    public void GameEnd(){
+        isGameover = true;
+        UIManager.instance.GameEnd();
         ApplyCursorLock();
     }
 

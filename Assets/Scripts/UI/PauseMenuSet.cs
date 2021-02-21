@@ -12,6 +12,7 @@ public class PauseMenuSet : MonoBehaviour
     public GameObject pauseTab;
 
     public GameObject settingTab;
+    public GameObject howToPlayTab;
     private Setting setting;
 
     private void Start() {
@@ -80,8 +81,14 @@ public class PauseMenuSet : MonoBehaviour
         pauseTab.SetActive(false);
     }
 
+    public void ClickHowtoPlay(){
+        howToPlayTab.SetActive(true);
+        pauseTab.SetActive(false);
+    }
+
     public void ClickBack(){
         settingTab.SetActive(false);
+        howToPlayTab.SetActive(false);
         pauseTab.SetActive(true);
     }
 }

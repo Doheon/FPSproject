@@ -95,7 +95,7 @@ public class EnemyBoss1 : Enemy
                 _bullet.transform.localScale = new Vector3(0.4f,0.4f,0.4f);
                 
                 _bullet.SetRemoveTime(8);
-                _bullet.SetVelocityStart(50f,Quaternion.Euler(0,36f * i,0) *transform.forward, 0.3f);
+                _bullet.SetVelocityStart(TitleSetting.bulletSpeed,Quaternion.Euler(0,36f * i,0) *transform.forward, 0.3f);
             }
         }
     }
