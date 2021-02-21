@@ -141,7 +141,6 @@ public class Enemy : LivingEntity, Stopable
         UIManager.instance.DisplayDamage((int)damage, isCrit, hitPoint);
         
         if (HP <= 0 && !dead) Die();
-
     }
 
     private IEnumerator changeSlider(Slider _slider, float _val){

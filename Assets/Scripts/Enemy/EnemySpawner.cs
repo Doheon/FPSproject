@@ -144,7 +144,8 @@ public class EnemySpawner : MonoBehaviour
     private void EnemySpawn5(){
         Transform pos;
         pos = spawnPointBoss;
-        CreateEnemy(enemyBoss1, health*50, damage, 3f, exp*10, Color.white, pos, true);
+        CreateEnemy(enemyBoss1, health*35f, damage, 3f, exp*10, Color.white, pos, true);
+        isClear = false;
     }
 
 
