@@ -126,7 +126,6 @@ public class GameManager : MonoBehaviour
     }
 
     public void GameEnd(){
-        isGameover = true;
         UIManager.instance.GameEnd();
         ApplyCursorLock();
     }

@@ -48,15 +48,15 @@ public class StageClear : MonoBehaviour
     }
 
     private void setLists(){
-        valList.Add(new List<float>{30f, 50f, 70f, 100f}); //attack damage
+        valList.Add(new List<float>{50f, 70f, 100f, 140f}); //attack damage
         valList.Add(new List<float>{15f, 25f, 35f, 50f}); //attack speed
-        valList.Add(new List<float>{50f, 70f, 90f, 120f}); //crtical damage
-        valList.Add(new List<float>{20f, 35f, 50f, 70f}); //critical probability
-        valList.Add(new List<float>{60f, 80f, 100f, 130f}); //HP
-        valList.Add(new List<float>{30f, 45f, 60f, 80f}); //armor
-        valList.Add(new List<float>{25f, 40f, 55f, 70f}); //skill haste
-        valList.Add(new List<float>{20f, 40f, 60f, 90f}); //skill damage
-        valList.Add(new List<float>{2f, 4f, 6f, 10f}); //life steal
+        valList.Add(new List<float>{70f, 100f, 130f, 180f}); //crtical damage
+        valList.Add(new List<float>{30f, 50f, 70f, 90f}); //critical probability
+        valList.Add(new List<float>{80f, 120f, 160f, 200f}); //HP
+        valList.Add(new List<float>{50f, 70f, 90f, 120f}); //armor
+        valList.Add(new List<float>{40f, 60f, 80f, 100f}); //skill haste
+        valList.Add(new List<float>{50f, 80f, 110f, 150f}); //skill damage
+        valList.Add(new List<float>{5f, 8f, 12f, 18f}); //life steal
 
         AttackDamage = new Set(player.AddAttackDamage);
         AttackSpeed = new Set(player.AddAttackSpeed);

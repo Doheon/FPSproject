@@ -13,6 +13,8 @@ public class PauseMenuSet : MonoBehaviour
 
     public GameObject settingTab;
     public GameObject howToPlayTab;
+    public GameObject gameEnd;
+
     private Setting setting;
 
     private void Start() {
@@ -45,6 +47,7 @@ public class PauseMenuSet : MonoBehaviour
         pausePanel.SetActive(false);
         pauseTab.SetActive(false);
         settingTab.SetActive(false);
+        gameEnd.SetActive(false);
 
         Time.timeScale = 1f;
     }
