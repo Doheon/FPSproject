@@ -1,5 +1,28 @@
 # FPS Project by Unity
 
+### play video
+
+**Rifle**
+
+![1](README.assets/1.gif)
+
+&nbsp;
+
+**Shotgun**
+
+![2](README.assets/2.gif)
+
+&nbsp;
+
+
+
+**Sniper**
+
+![3](README.assets/3.gif)
+
+&nbsp;
+
+
 
 ### 0.5v 
 
